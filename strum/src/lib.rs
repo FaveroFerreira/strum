@@ -36,9 +36,9 @@ pub use phf as _private_phf_reexport_for_macro_if_phf_feature;
 
 /// The `ParseError` enum is a collection of all the possible reasons
 /// an enum can fail to parse from a string.
-#[derive(Debug, Clone, Copy, Eq, PartialEq, Hash)]
+#[derive(Debug, Clone, Eq, PartialEq, Hash)]
 pub enum ParseError {
-    VariantNotFound,
+    VariantNotFound { variant: String },
 }
 
 #[cfg(feature = "std")]
@@ -47,7 +47,7 @@ impl std::fmt::Display for ParseError {
         // We could use our macro here, but this way we don't take a dependency on the
         // macros crate.
         match self {
-            ParseError::VariantNotFound => write!(f, "Matching variant not found"),
+            ParseError::VariantNotFound { variant} => write!(f, "Matching variant not found: {}", variant),
         }
     }
 }
@@ -56,8 +56,8 @@ impl std::fmt::Display for ParseError {
 impl std::error::Error for ParseError {
     fn description(&self) -> &str {
         match self {
-            ParseError::VariantNotFound => {
-                "Unable to find a variant of the given enum matching the string given. Matching \
+            ParseError::VariantNotFound { .. } => {
+                "Unable to find a variant '{}' of the given enum matching the string given. Matching \
                  can be extended with the Serialize attribute and is case sensitive."
             }
         }

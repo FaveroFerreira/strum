@@ -103,7 +103,7 @@ enum Week {
 #[test]
 fn week_not_found() {
     assert_eq!(
-        Result::Err(::strum::ParseError::VariantNotFound),
+        Result::Err(::strum::ParseError::VariantNotFound { variant: "Humpday".into() }),
         Week::from_str("Humpday")
     );
 }

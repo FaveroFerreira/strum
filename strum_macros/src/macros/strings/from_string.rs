@@ -19,7 +19,7 @@ pub fn from_string_inner(ast: &DeriveInput) -> syn::Result<TokenStream> {
 
     let mut default_kw = None;
     let mut default =
-        quote! { ::core::result::Result::Err(#strum_module_path::ParseError::VariantNotFound) };
+        quote! { ::core::result::Result::Err(#strum_module_path::ParseError::VariantNotFound { variant: s.into() }) };
 
     let mut phf_exact_match_arms = Vec::new();
     let mut standard_match_arms = Vec::new();
